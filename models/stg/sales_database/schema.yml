@@ -14,19 +14,17 @@ models:
         data_tests:
           - not_null
           - relationships:
+              name: fk_order_user_id
               arguments:
                 to: ref('stg_sales_database__user')
                 field: user_id
-              config:
-                name: fk_order_user_id
       - name: order_status
         description: "Statut actuel de la commande."
         data_tests:
           - accepted_values:
+              name: accepted_values_order_status
               arguments:
                 values: ['delivered', 'shipped', 'canceled', 'unavailable', 'invoiced', 'processing', 'created', 'approved']
-              config:
-                name: accepted_values_order_status
       - name: ordered_at
         description: "Horodatage de la commande. Converti depuis order_date via cast en timestamp."
       - name: order_approved_at
@@ -51,31 +49,28 @@ models:
         data_tests:
           - not_null
           - relationships:
+              name: fk_order_item_order_id
               arguments:
                 to: ref('stg_sales_database__order')
                 field: order_id
-              config:
-                name: fk_order_item_order_id
       - name: product_id
         description: "Clé étrangère vers stg_sales_database__product."
         data_tests:
           - not_null
           - relationships:
+              name: fk_order_item_product_id
               arguments:
                 to: ref('stg_sales_database__product')
                 field: product_id
-              config:
-                name: fk_order_item_product_id
       - name: seller_id
         description: "Clé étrangère vers stg_sales_database__seller."
         data_tests:
           - not_null
           - relationships:
+              name: fk_order_item_seller_id
               arguments:
                 to: ref('stg_sales_database__seller')
                 field: seller_id
-              config:
-                name: fk_order_item_seller_id
       - name: quantity
         description: "Nombre d'unités commandées. Défaut à 0 si null (coalesce appliqué)."
       - name: price
@@ -151,19 +146,17 @@ models:
         data_tests:
           - not_null
           - relationships:
+              name: fk_payment_order_id
               arguments:
                 to: ref('stg_sales_database__order')
                 field: order_id
-              config:
-                name: fk_payment_order_id
       - name: payment_type
         description: "Type de paiement utilisé."
         data_tests:
           - accepted_values:
+              name: accepted_values_payment_type
               arguments:
                 values: ['credit_card', 'boleto', 'voucher', 'debit_card', 'not_defined']
-              config:
-                name: accepted_values_payment_type
       - name: payment_sequential
         description: "Numéro séquentiel du paiement au sein d'une commande."
       - name: payment_installments
@@ -184,19 +177,17 @@ models:
         data_tests:
           - not_null
           - relationships:
+              name: fk_feedback_order_id
               arguments:
                 to: ref('stg_sales_database__order')
                 field: order_id
-              config:
-                name: fk_feedback_order_id
       - name: feedback_score
         description: "Note de satisfaction donnée par le client. Défaut à 0 si null (coalesce appliqué)."
         data_tests:
           - accepted_values:
+              name: accepted_values_feedback_score
               arguments:
                 values: [0, 1, 2, 3, 4, 5]
-              config:
-                name: accepted_values_feedback_score
       - name: feedback_form_sent_at
         description: "Horodatage de l'envoi du formulaire de feedback. Converti depuis feedback_form_sent_date via cast en timestamp."
       - name: feedback_answer_at
