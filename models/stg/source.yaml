@@ -1,0 +1,23 @@
+sources:
+         - name: ingestion_fivetran_public
+           tables:
+             - name: feedback
+             - name: order
+             - name: order_item
+             - name: payment
+             - name: product
+             - name: seller
+             - name: user
+
+         - name: tp4_Exo2_EU
+           tables:
+             - name: events_flattened
+
+         - name: tp4
+           tables:
+            - name: dim_responsable
+
+         - name: Spotify
+           tables:
+              - name: songs
+              - name: listening_data
