@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: stg_google_analytics__events_flattened
+    description: "Table staging des événements Google Analytics. Chaque ligne représente un événement unique suivi dans Google Analytics, avec les informations de session et de trafic."
+    columns:
+      - name: unique_session_id
+        description: "Identifiant unique de session calculé par concat(user_pseudo_id, '-', ga_session_id). Utilisé pour regrouper les événements en sessions."
+      - name: event_date
+        description: "Date de l'événement. Convertie depuis le format chaîne AAAAMMJJ en DATE via parse_date."
+      - name: event_name
+        description: "Nom de l'événement suivi (ex : page_view, session_start)."
+      - name: event_timestamp
+        description: "Horodatage précis de l'événement. Converti depuis les microsecondes via timestamp_micros()."
+      - name: user_pseudo_id
+        description: "Identifiant pseudonyme de l'utilisateur."
+        data_tests:
+          - not_null
+      - name: user_first_touch_at
+        description: "Horodatage de la première interaction de l'utilisateur. Converti depuis les microsecondes via timestamp_micros()."
+      - name: ga_session_id
+        description: "Identifiant de session Google Analytics."
+      - name: page_title
+        description: "Titre de la page où l'événement s'est produit."
+      - name: page_location
+        description: "URL de la page où l'événement s'est produit."
+      - name: browser
+        description: "Navigateur utilisé pendant la session."
+      - name: medium
+        description: "Canal de trafic (ex : organic, referral, cpc)."
+      - name: source
+        description: "Source du trafic (ex : google, direct)."
+      - name: traffic_source_name
+        description: "Nom de la campagne source du trafic."

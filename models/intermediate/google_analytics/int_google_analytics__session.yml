@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: int_google_analytics__session
+    description: '{{ doc("int_google_analytics__session") }}'
+    columns:
+      - name: unique_session_id
+        description: "Clé primaire. Identifiant unique de session dérivé de user_pseudo_id et ga_session_id."
+      - name: user_pseudo_id
+        description: "Identifiant pseudonyme de l'utilisateur."
+      - name: session_start_time
+        description: "Horodatage du premier événement de la session."
+      - name: session_end_time
+        description: "Horodatage du dernier événement de la session."
+      - name: session_duration_seconds
+        description: "Durée de la session en secondes, calculée comme la différence entre le dernier et le premier horodatage d'événement."
+      - name: browser_used
+        description: "Navigateur utilisé pendant la session."
+      - name: traffic_medium
+        description: "Canal de trafic de la session (ex : organic, referral)."
+      - name: traffic_source
+        description: "Source de trafic de la session (ex : google, direct)."
+      - name: traffic_name
+        description: "Nom de la campagne associée au trafic de la session."
+      - name: event_count
+        description: "Nombre total d'événements enregistrés pendant la session."
+      - name: pages_viewed
+        description: "Nombre d'événements page_view enregistrés pendant la session."

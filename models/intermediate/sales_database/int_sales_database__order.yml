@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: int_sales_database__order
+    description: '{{ doc("int_sales_database__order") }}'
+    columns:
+      - name: order_id
+        description: "Clé primaire. Identifiant unique de chaque commande."
+      - name: user_id
+        description: "Clé étrangère vers l'utilisateur ayant passé la commande."
+      - name: order_status
+        description: "Statut actuel de la commande."
+      - name: order_created_at
+        description: "Horodatage de la création de la commande."
+      - name: order_approved_at
+        description: "Horodatage de l'approbation de la commande."
+      - name: user_city
+        description: "Ville de l'utilisateur ayant passé la commande."
+      - name: user_state
+        description: "État de l'utilisateur ayant passé la commande."
+      - name: average_feedback_score
+        description: "Score moyen de satisfaction pour cette commande. Défaut à 0.0 si aucun feedback n'existe."
+      - name: total_order_amount
+        description: "Montant total de la commande (somme de prix + livraison pour tous les articles). Défaut à 0.0."
+      - name: total_items
+        description: "Nombre total d'articles (somme des quantités) dans la commande. Défaut à 0."
+      - name: total_distinct_items
+        description: "Nombre de produits distincts dans la commande. Défaut à 0."
