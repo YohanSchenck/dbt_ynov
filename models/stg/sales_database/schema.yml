@@ -189,7 +189,8 @@ models:
           - accepted_values:
               name: accepted_values_feedback_score
               arguments:
-                values: ['0', '1', '2', '3', '4', '5']
+                values: [0, 1, 2, 3, 4, 5]
+                quote: false
       - name: feedback_form_sent_at
         description: "Horodatage de l'envoi du formulaire de feedback. Converti depuis feedback_form_sent_date via cast en timestamp."
       - name: feedback_answer_at
