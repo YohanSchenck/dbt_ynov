@@ -37,20 +37,27 @@ clean-targets:         # directories to be removed by `dbt clean`
 
 models:
   my_new_project:
-    # Applies to all files under models/example/
     stg:
+      +materialized: view
       sales_database:
-        +materialized: table
-      
+        +schema: stg_sales_database
       google_sheets:
-        +materialized: table
-      
+        +schema: stg_google_sheets
       google_analytics:
-        +materialized: table
+        +schema: stg_google_analytics
+      spotify:
+        +schema: stg_spotify
 
     intermediate:
+      +materialized: view
       sales_database:
-        +materialized: table
-
+        +schema: int_sales_database
       google_analytics:
+        +schema: int_google_analytics
         +materialized: table
+      spotify:
+        +schema: int_spotify
+
+    mart:
+      +materialized: table
+      +schema: mart

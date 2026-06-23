@@ -1,4 +1,9 @@
-with 
+{{ config(
+    materialized='table',
+    cluster_by=['event_name', 'event_date']
+) }}
+
+with
 
 source as (
 
