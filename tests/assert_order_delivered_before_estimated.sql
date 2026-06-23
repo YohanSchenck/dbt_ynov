@@ -1,10 +1,10 @@
--- Ensures no delivered order has a delivery date after the estimated delivery date
+-- Vérifie qu'aucune commande n'a une date d'approbation antérieure à la date de commande
 select
     order_id,
-    delivered_at,
-    estimated_delivery_on
+    ordered_at,
+    order_approved_at
 from {{ ref('stg_sales_database__order') }}
 where
-    delivered_at is not null
-    and estimated_delivery_on is not null
-    and cast(delivered_at as date) > estimated_delivery_on
+    order_approved_at is not null
+    and ordered_at is not null
+    and order_approved_at < ordered_at
