@@ -1,25 +1,25 @@
-with source as (
+with 
 
-    select * from {{ source('localbike', 'orders') }}
+source as (
+
+    select * from {{ source('public', 'orders') }}
 
 ),
 
 renamed as (
 
     select
-        -- ids
-        order_id,
-        customer_id,
+        ctid_fivetran_id,
         store_id,
-        staff_id,
-
-        -- statut
         order_status,
-
-        -- dates
-        cast(order_date as date)    as order_date,
-        cast(required_date as date) as required_date,
-        cast(shipped_date as date)  as shipped_date
+        order_date,
+        required_date,
+        shipped_date,
+        staff_id,
+        customer_id,
+        order_id,
+        _fivetran_deleted,
+        _fivetran_synced
 
     from source
 

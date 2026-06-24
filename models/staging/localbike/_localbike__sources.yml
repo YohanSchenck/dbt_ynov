@@ -1,21 +1,7 @@
 version: 2
 
 sources:
-  - name: localbike
-    description: >
-      Données opérationnelles de Local Bike (clients, commandes, stocks, produits)
-      ingérées via Fivetran depuis la base Supabase (PostgreSQL) vers BigQuery.
-    # À adapter selon la configuration Fivetran / BigQuery :
-    #   database = ID du projet GCP
-    #   schema   = dataset de destination configuré dans le connecteur Fivetran
-    database: "{{ env_var('DBT_GCP_PROJECT', 'local-bike') }}"
-    schema: "{{ env_var('DBT_FIVETRAN_SCHEMA', 'localbike') }}"
-
-    # Métadonnées de fraîcheur basées sur la colonne technique Fivetran (_fivetran_synced)
-    loaded_at_field: _fivetran_synced
-    freshness:
-      warn_after: { count: 24, period: hour }
-      error_after: { count: 48, period: hour }
+  - name: public
 
     tables:
       # --- Sales ---

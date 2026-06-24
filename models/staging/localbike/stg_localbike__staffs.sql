@@ -1,23 +1,25 @@
-with source as (
+with 
 
-    select * from {{ source('localbike', 'staffs') }}
+source as (
+
+    select * from {{ source('public', 'staffs') }}
 
 ),
 
 renamed as (
 
     select
-        -- ids
-        staff_id,
+        ctid_fivetran_id,
         store_id,
-        manager_id,
-
-        -- attributs
-        first_name,
-        last_name,
-        lower(email)            as email,
         phone,
-        cast(active as boolean) as is_active
+        manager_id,
+        staff_id,
+        last_name,
+        active,
+        first_name,
+        email,
+        _fivetran_deleted,
+        _fivetran_synced
 
     from source
 

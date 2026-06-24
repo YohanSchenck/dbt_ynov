@@ -1,26 +1,26 @@
-with source as (
+with 
 
-    select * from {{ source('localbike', 'customers') }}
+source as (
+
+    select * from {{ source('public', 'customers') }}
 
 ),
 
 renamed as (
 
     select
-        -- ids
-        customer_id,
-
-        -- attributs
-        first_name,
-        last_name,
-        lower(email)            as email,
+        ctid_fivetran_id,
         phone,
-
-        -- adresse
-        street,
         city,
+        street,
+        last_name,
         state,
-        zip_code
+        customer_id,
+        first_name,
+        email,
+        zip_code,
+        _fivetran_deleted,
+        _fivetran_synced
 
     from source
 

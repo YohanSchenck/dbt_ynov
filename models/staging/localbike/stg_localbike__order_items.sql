@@ -1,25 +1,23 @@
-with source as (
+with 
 
-    select * from {{ source('localbike', 'order_items') }}
+source as (
+
+    select * from {{ source('public', 'order_items') }}
 
 ),
 
 renamed as (
 
     select
-        -- clé technique (order_id + item_id)
-        {{ dbt_utils.generate_surrogate_key(['order_id', 'item_id']) }} as order_item_id,
-
-        -- ids
-        order_id,
+        ctid_fivetran_id,
+        quantity,
         item_id,
         product_id,
-
-        -- mesures
-        quantity,
-        list_price,
         discount,
-        round(quantity * list_price * (1 - discount), 2) as net_amount
+        list_price,
+        order_id,
+        _fivetran_deleted,
+        _fivetran_synced
 
     from source
 

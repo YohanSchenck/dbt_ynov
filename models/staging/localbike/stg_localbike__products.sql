@@ -1,21 +1,23 @@
-with source as (
+with 
 
-    select * from {{ source('localbike', 'products') }}
+source as (
+
+    select * from {{ source('public', 'products') }}
 
 ),
 
 renamed as (
 
     select
-        -- ids
-        product_id,
-        brand_id,
+        ctid_fivetran_id,
         category_id,
-
-        -- attributs
-        product_name,
+        product_id,
         model_year,
-        list_price
+        list_price,
+        product_name,
+        brand_id,
+        _fivetran_deleted,
+        _fivetran_synced
 
     from source
 

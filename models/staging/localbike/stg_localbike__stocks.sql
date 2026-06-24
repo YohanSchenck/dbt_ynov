@@ -1,21 +1,20 @@
-with source as (
+with 
 
-    select * from {{ source('localbike', 'stocks') }}
+source as (
+
+    select * from {{ source('public', 'stocks') }}
 
 ),
 
 renamed as (
 
     select
-        -- clé technique (store_id + product_id)
-        {{ dbt_utils.generate_surrogate_key(['store_id', 'product_id']) }} as stock_id,
-
-        -- ids
+        ctid_fivetran_id,
         store_id,
+        quantity,
         product_id,
-
-        -- mesures
-        quantity
+        _fivetran_deleted,
+        _fivetran_synced
 
     from source
 

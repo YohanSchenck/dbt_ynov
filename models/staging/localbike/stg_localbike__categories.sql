@@ -1,14 +1,19 @@
-with source as (
+with 
 
-    select * from {{ source('localbike', 'categories') }}
+source as (
+
+    select * from {{ source('public', 'categories') }}
 
 ),
 
 renamed as (
 
     select
+        ctid_fivetran_id,
+        category_name,
         category_id,
-        category_name
+        _fivetran_deleted,
+        _fivetran_synced
 
     from source
 
