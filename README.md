@@ -29,11 +29,6 @@ Les sources sont définies dans
 Le projet tourne sous **dbt Cloud**. La connexion BigQuery est configurée dans l'UI
 dbt Cloud (Connections / Environment) — pas de `profiles.yml` local.
 
-Variables d'environnement (à définir dans l'environnement dbt Cloud) utilisées par la
-définition des sources :
-
-- `DBT_GCP_PROJECT` — ID du projet GCP (défaut : `local-bike`)
-- `DBT_FIVETRAN_SCHEMA` — dataset de destination du connecteur Fivetran (défaut : `localbike`)
 
 ## Commandes (dbt Cloud IDE / jobs)
 
