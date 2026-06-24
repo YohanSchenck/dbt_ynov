@@ -1,0 +1,162 @@
+version: 2
+
+models:
+  - name: stg_localbike__customers
+    description: Clients nettoyés.
+    columns:
+      - name: customer_id
+        description: Clé primaire du client.
+        tests: [unique, not_null]
+      - name: email
+        description: Email du client.
+
+  - name: stg_localbike__staffs
+    description: Employés des magasins.
+    columns:
+      - name: staff_id
+        description: Clé primaire de l'employé.
+        tests: [unique, not_null]
+      - name: store_id
+        description: Magasin de rattachement.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_localbike__stores')
+                field: store_id
+      - name: manager_id
+        description: Manager de l'employé (null pour le top management).
+      - name: active
+        description: Indique si l'employé est actif.
+
+  - name: stg_localbike__stores
+    description: Magasins Local Bike (Santa Cruz, Baldwin, Rowlett).
+    columns:
+      - name: store_id
+        description: Clé primaire du magasin.
+        tests: [unique, not_null]
+
+  - name: stg_localbike__orders
+    description: Commandes avec dates et statut.
+    columns:
+      - name: order_id
+        description: Clé primaire de la commande.
+        tests: [unique, not_null]
+      - name: customer_id
+        description: Client ayant passé la commande.
+        tests:
+          - relationships:
+              arguments:
+                to: ref('stg_localbike__customers')
+                field: customer_id
+      - name: store_id
+        description: Magasin où la commande a été passée.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_localbike__stores')
+                field: store_id
+      - name: staff_id
+        description: Employé ayant traité la commande.
+        tests:
+          - relationships:
+              arguments:
+                to: ref('stg_localbike__staffs')
+                field: staff_id
+      - name: order_status
+        description: Statut de la commande (1=Pending, 2=Processing, 3=Rejected, 4=Completed).
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4]
+
+  - name: stg_localbike__order_items
+    description: Lignes de commande.
+    columns:
+      - name: order_id
+        description: Commande parente.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_localbike__orders')
+                field: order_id
+      - name: product_id
+        description: Produit commandé.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_localbike__products')
+                field: product_id
+      - name: quantity
+        description: Quantité commandée.
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                inclusive: false
+      - name: discount
+        description: Remise appliquée (0 à 1).
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 1
+
+  - name: stg_localbike__products
+    description: Catalogue produits.
+    columns:
+      - name: product_id
+        description: Clé primaire du produit.
+        tests: [unique, not_null]
+      - name: brand_id
+        description: Marque du produit.
+        tests:
+          - relationships:
+              arguments:
+                to: ref('stg_localbike__brands')
+                field: brand_id
+      - name: category_id
+        description: Catégorie du produit.
+        tests:
+          - relationships:
+              arguments:
+                to: ref('stg_localbike__categories')
+                field: category_id
+
+  - name: stg_localbike__categories
+    description: Catégories de produits.
+    columns:
+      - name: category_id
+        description: Clé primaire de la catégorie.
+        tests: [unique, not_null]
+
+  - name: stg_localbike__brands
+    description: Marques de produits.
+    columns:
+      - name: brand_id
+        description: Clé primaire de la marque.
+        tests: [unique, not_null]
+
+  - name: stg_localbike__stocks
+    description: Niveaux de stock par magasin et par produit.
+    columns:
+      - name: store_id
+        description: Magasin.
+        tests:
+          - relationships:
+              arguments:
+                to: ref('stg_localbike__stores')
+                field: store_id
+      - name: product_id
+        description: Produit.
+        tests:
+          - relationships:
+              arguments:
+                to: ref('stg_localbike__products')
+                field: product_id
+      - name: quantity
+        description: Quantité en stock.

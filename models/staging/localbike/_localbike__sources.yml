@@ -1,0 +1,76 @@
+version: 2
+
+sources:
+  - name: public
+
+    tables:
+      # --- Sales ---
+      - name: customers
+        description: Clients de Local Bike.
+        columns:
+          - name: customer_id
+            description: Identifiant unique du client.
+            tests:
+              - unique
+              - not_null
+
+      - name: orders
+        description: Commandes passées par les clients.
+        columns:
+          - name: order_id
+            description: Identifiant unique de la commande.
+            tests:
+              - unique
+              - not_null
+
+      - name: order_items
+        description: Lignes de commande (produits, quantités, prix, remise).
+
+      - name: staffs
+        description: Employés rattachés aux magasins.
+        columns:
+          - name: staff_id
+            description: Identifiant unique de l'employé.
+            tests:
+              - unique
+              - not_null
+
+      - name: stores
+        description: Magasins Local Bike (Santa Cruz, Baldwin, Rowlett).
+        columns:
+          - name: store_id
+            description: Identifiant unique du magasin.
+            tests:
+              - unique
+              - not_null
+
+      # --- Production ---
+      - name: products
+        description: Catalogue produits.
+        columns:
+          - name: product_id
+            description: Identifiant unique du produit.
+            tests:
+              - unique
+              - not_null
+
+      - name: categories
+        description: Catégories de produits.
+        columns:
+          - name: category_id
+            description: Identifiant unique de la catégorie.
+            tests:
+              - unique
+              - not_null
+
+      - name: brands
+        description: Marques de produits.
+        columns:
+          - name: brand_id
+            description: Identifiant unique de la marque.
+            tests:
+              - unique
+              - not_null
+
+      - name: stocks
+        description: Niveaux de stock par magasin et par produit.

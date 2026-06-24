@@ -1,15 +1,44 @@
-Welcome to your new dbt project!
+# Local Bike — Projet Final (dbt)
 
-### Using the starter project
+Modélisation des données de **Local Bike** pour alimenter le premier tableau de bord
+de l'entreprise et soutenir l'équipe des opérations (optimisation des ventes, revenus).
 
-Try running the following commands:
-- dbt run
-- dbt test
+## Architecture
 
+```
+Supabase (PostgreSQL)  ──Fivetran──▶  BigQuery (raw)  ──dbt──▶  staging ▸ intermediate ▸ marts
+```
 
-### Resources:
-- Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
-- Check out [Discourse](https://discourse.getdbt.com/) for commonly asked questions and answers
-- Join the [dbt community](https://getdbt.com/community) to learn from other analytics engineers
-- Find [dbt events](https://events.getdbt.com) near you
-- Check out [the blog](https://blog.getdbt.com/) for the latest news on dbt's development and best practices
+- **Ingestion** : [Fivetran](https://www.fivetran.com/) synchronise les tables de la base
+  Supabase vers un dataset BigQuery.
+- **Transformation** : dbt structure les données en trois couches.
+
+## Structure dbt
+
+| Couche | Dossier | Matérialisation | Rôle |
+|--------|---------|-----------------|------|
+| Staging | `models/staging/` | view | Nettoyage / renommage 1:1 des sources Fivetran |
+| Intermediate | `models/intermediate/` | view | Logique métier réutilisable |
+| Marts | `models/marts/` | table | Modèles d'analyse connectés au dashboard |
+
+Les sources sont définies dans
+[`models/staging/localbike/_localbike__sources.yml`](models/staging/localbike/_localbike__sources.yml).
+
+## Configuration
+
+Le projet tourne sous **dbt Cloud**. La connexion BigQuery est configurée dans l'UI
+dbt Cloud (Connections / Environment) — pas de `profiles.yml` local.
+
+Variables d'environnement (à définir dans l'environnement dbt Cloud) utilisées par la
+définition des sources :
+
+- `DBT_GCP_PROJECT` — ID du projet GCP (défaut : `local-bike`)
+- `DBT_FIVETRAN_SCHEMA` — dataset de destination du connecteur Fivetran (défaut : `localbike`)
+
+## Commandes (dbt Cloud IDE / jobs)
+
+```bash
+dbt deps      # installe les packages
+dbt build     # run + test
+dbt docs generate   # documentation
+```
