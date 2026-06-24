@@ -1,0 +1,90 @@
+version: 2
+
+sources:
+  - name: localbike
+    description: >
+      Données opérationnelles de Local Bike (clients, commandes, stocks, produits)
+      ingérées via Fivetran depuis la base Supabase (PostgreSQL) vers BigQuery.
+    # À adapter selon la configuration Fivetran / BigQuery :
+    #   database = ID du projet GCP
+    #   schema   = dataset de destination configuré dans le connecteur Fivetran
+    database: "{{ env_var('DBT_GCP_PROJECT', 'local-bike') }}"
+    schema: "{{ env_var('DBT_FIVETRAN_SCHEMA', 'localbike') }}"
+
+    # Métadonnées de fraîcheur basées sur la colonne technique Fivetran (_fivetran_synced)
+    loaded_at_field: _fivetran_synced
+    freshness:
+      warn_after: { count: 24, period: hour }
+      error_after: { count: 48, period: hour }
+
+    tables:
+      # --- Sales ---
+      - name: customers
+        description: Clients de Local Bike.
+        columns:
+          - name: customer_id
+            description: Identifiant unique du client.
+            tests:
+              - unique
+              - not_null
+
+      - name: orders
+        description: Commandes passées par les clients.
+        columns:
+          - name: order_id
+            description: Identifiant unique de la commande.
+            tests:
+              - unique
+              - not_null
+
+      - name: order_items
+        description: Lignes de commande (produits, quantités, prix, remise).
+
+      - name: staffs
+        description: Employés rattachés aux magasins.
+        columns:
+          - name: staff_id
+            description: Identifiant unique de l'employé.
+            tests:
+              - unique
+              - not_null
+
+      - name: stores
+        description: Magasins Local Bike (Santa Cruz, Baldwin, Rowlett).
+        columns:
+          - name: store_id
+            description: Identifiant unique du magasin.
+            tests:
+              - unique
+              - not_null
+
+      # --- Production ---
+      - name: products
+        description: Catalogue produits.
+        columns:
+          - name: product_id
+            description: Identifiant unique du produit.
+            tests:
+              - unique
+              - not_null
+
+      - name: categories
+        description: Catégories de produits.
+        columns:
+          - name: category_id
+            description: Identifiant unique de la catégorie.
+            tests:
+              - unique
+              - not_null
+
+      - name: brands
+        description: Marques de produits.
+        columns:
+          - name: brand_id
+            description: Identifiant unique de la marque.
+            tests:
+              - unique
+              - not_null
+
+      - name: stocks
+        description: Niveaux de stock par magasin et par produit.
