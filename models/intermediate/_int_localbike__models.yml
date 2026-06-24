@@ -1,0 +1,60 @@
+version: 2
+
+models:
+  - name: int_localbike__order_details
+    description: >
+      Grain : une ligne par item de commande, enrichi avec produit (catégorie, marque),
+      magasin et employé. Base pour toutes les analyses de ventes.
+    columns:
+      - name: order_id
+        description: Identifiant de la commande.
+        tests: [not_null]
+      - name: item_id
+        description: Numéro de ligne dans la commande.
+        tests: [not_null]
+      - name: line_total
+        description: Montant net de la ligne (qty × list_price × (1 − discount)).
+
+  - name: int_localbike__customer_orders
+    description: >
+      Agrégation par client : nombre de commandes, revenu total, panier moyen,
+      dates première/dernière commande. Sert à la segmentation et rétention.
+    columns:
+      - name: customer_id
+        description: Clé primaire du client.
+        tests: [unique, not_null]
+      - name: total_revenue
+        description: Revenu total des commandes complétées (status 4).
+      - name: avg_order_value
+        description: Panier moyen des commandes complétées.
+
+  - name: int_localbike__product_performance
+    description: >
+      Performance produit : unités vendues, revenu, remise moyenne.
+      Basé uniquement sur les commandes complétées (status 4).
+    columns:
+      - name: product_id
+        description: Clé primaire du produit.
+        tests: [unique, not_null]
+      - name: total_units_sold
+        description: Nombre total d'unités vendues.
+      - name: total_revenue
+        description: Revenu total généré par le produit.
+
+  - name: int_localbike__stock_coverage
+    description: >
+      Croisement stock actuel vs performance de vente par produit/magasin.
+      Classe chaque stock en out_of_stock / low / medium / well_stocked.
+    columns:
+      - name: store_id
+        description: Magasin.
+        tests: [not_null]
+      - name: product_id
+        description: Produit.
+        tests: [not_null]
+      - name: stock_level
+        description: Classification du niveau de stock.
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['out_of_stock', 'low_stock', 'medium_stock', 'well_stocked']
